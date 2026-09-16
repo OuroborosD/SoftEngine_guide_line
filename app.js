@@ -21,7 +21,7 @@
   function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400)}
   function esc(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
   function defaultSettings(){return {autoBackup:false,interval:30,lastAttempt:'',nextBackup:'',destinations:{primary:{name:'',status:'not-configured',lastAt:''},secondary:{name:'',status:'not-configured',lastAt:''}}}}
-  function normalizeSettings(saved={}){const defaults=defaultSettings();return {...defaults,...saved,destinations:{primary:{...defaults.destinations.primary,...saved.destinations?.primary},secondary:{...defaults.destinations.secondary,...saved.destinations?.secondary}}}}
+  function normalizeSettings(saved={}){const defaults=defaultSettings(),source=saved&&typeof saved==='object'?saved:{},destinations=source.destinations&&typeof source.destinations==='object'?source.destinations:{};return {...defaults,...source,destinations:{primary:{...defaults.destinations.primary,...destinations.primary},secondary:{...defaults.destinations.secondary,...destinations.secondary}}}}
   function loadSettings(){try{return normalizeSettings(JSON.parse(localStorage.getItem(SETTINGS_KEY)||'{}'))}catch{return defaultSettings()}}
   function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}
   function supportsBackup(){return 'showDirectoryPicker' in window&&'indexedDB' in window}
